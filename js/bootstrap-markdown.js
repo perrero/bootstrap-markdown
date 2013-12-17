@@ -94,8 +94,8 @@
               buttonToggle = ' data-toggle="button"'
             }
 
-            // Attach the button object
-            btnGroupContainer.append('<button class="'
+            // Attach the button objecta
+            var btnElem = $('<button class="'
                                     +btnClass
                                     +' btn-default btn-sm" title="'
                                     +button.title
@@ -111,11 +111,17 @@
                                     +button.icon
                                     +'"></span> '
                                     +btnText
-                                    +'</button>')
+                                    +'</button>');
+             btnGroupContainer.append(btnElem);
 
             // Register handler and callback
             handler.push(buttonHandler)
             callback.push(button.callback)
+            if (button.name == 'cmdPreview') {
+                if (!this.$options.previewable) {
+                    btnElem.hide()
+                }
+            }
           }
 
           // Attach the button group into container dom
@@ -687,6 +693,7 @@
     autofocus: false,
     hideable: false,
     savable:false,
+    previewable: false,
     width: 'inherit',
     height: 'inherit',
 
