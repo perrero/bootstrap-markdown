@@ -1,4 +1,6 @@
-/* ===================================================
+/* 
+ * forked by perrero, https://github.com/perrero/bootstrap-markdown/tree/hide_buttons
+ * ===================================================
  * bootstrap-markdown.js v2.1.0
  * http://github.com/toopay/bootstrap-markdown
  * ===================================================
@@ -499,6 +501,26 @@
   , disableButtons: function(name) {
       var alter = function (el) {
         el.attr('disabled','disabled')
+      }
+
+      this.__alterButtons(name,alter)
+
+      return this
+    }
+    
+  , showButtons: function(name) {
+      var alter = function (el) {
+        el.show()
+      }
+
+      this.__alterButtons(name,alter)
+
+      return this
+    }
+
+  , hideButtons: function(name) {
+      var alter = function (el) {
+        el.hide()
       }
 
       this.__alterButtons(name,alter)
