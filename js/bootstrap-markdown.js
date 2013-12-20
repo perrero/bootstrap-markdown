@@ -1,4 +1,6 @@
-/* ===================================================
+/* 
+ * forked by perrero, https://github.com/perrero/bootstrap-markdown/tree/v1_hide_btns_transinput
+ * ===================================================
  * bootstrap-markdown.js v1.1.4
  * http://github.com/toopay/bootstrap-markdown
  * ===================================================
@@ -93,7 +95,7 @@
             }
 
             // Attach the button object
-            btnGroupContainer.append('<button class="'
+            var btnElem = $('<button class="'
                                     +btnClass
                                     +' btn-small" title="'
                                     +button.title
@@ -109,11 +111,18 @@
                                     +button.icon
                                     +'"></i> '
                                     +btnText
-                                    +'</button>')
+                                    +'</button>');
+
+            btnGroupContainer.append(btnElem);
 
             // Register handler and callback
             handler.push(buttonHandler)
             callback.push(button.callback)
+            if (button.name == 'cmdPreview') {
+                if (!this.$options.previewable) {
+                    btnElem.hide();
+                }
+            }
           }
 
           // Attach the button group into container dom
@@ -166,6 +175,11 @@
 
       e.preventDefault()
     }
+
+  , _oninput: function() {
+      this.$textarea.trigger('input')
+      return this
+  }
 
   , showEditor: function() {
       var instance = this,
@@ -366,6 +380,10 @@
   , setContent: function(content) {
       this.$textarea.val(content)
 
+      if (this.$options.transinput) {
+        this._oninput()
+      }
+
       return this
     }
 
@@ -410,7 +428,7 @@
 
       var e = this.$textarea[0]
 
-      return (
+      var retval= (
 
           ('selectionStart' in e && function() {
               e.selectionStart = start
@@ -424,6 +442,12 @@
           }
 
       )()
+
+      if (this.$options.transinput) {
+        this._oninput()
+      }
+
+      return retval
 
     }
 
@@ -505,6 +529,26 @@
 
       return this
     }
+
+  , showButtons: function(name) {
+      var alter = function (el) {
+        el.show()
+      }
+
+      this.__alterButtons(name,alter)
+
+      return this
+  }
+
+  , hideButtons: function(name) {
+      var alter = function (el) {
+        el.hide()
+      }
+
+      this.__alterButtons(name,alter)
+
+      return this
+  }
 
   , eventSupported: function(eventName) {
       var isSupported = eventName in this.$element
@@ -665,6 +709,8 @@
     autofocus: false,
     hideable: false,
     savable:false,
+    previewable:false,
+    transinput:true,
     width: 'inherit',
     height: 'inherit',
 
